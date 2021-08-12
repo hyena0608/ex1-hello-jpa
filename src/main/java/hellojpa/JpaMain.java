@@ -18,49 +18,22 @@ public class JpaMain {
 
         try{
 
-            Member member1 = new Member();
-            member1.setUsername("member1");
-            em.persist(member1);
+            Child child1 = new Child();
+            Child child2 = new Child();
 
-            Member member2 = new Member();
-            member2.setUsername("member2");
-            em.persist(member2);
+            Parent parent = new Parent();
+            parent.addChild(child1);
+            parent.addChild(child2);
+
+            em.persist(parent);
+            em.persist(child1);
+            em.persist(child2);
 
             em.flush();
             em.clear();
 
-            Member refMember = em.getReference(Member.class, member1.getId());
-            System.out.println("refMember = " + refMember.getClass()); //Proxy
-            Hibernate.initialize(refMember); //강제 초기화
-            System.out.println("isLoaded = " + emf.getPersistenceUnitUtil().isLoaded(refMember));
-
-
-            //
-//            em.detach(refMember);
-//            em.close();
-//            System.out.println("refMember = " + refMember.getUsername());
-
-            //
-//            refMember.getUsername();
-//
-//            Member findMember = em.find(Member.class, member1.getId());
-//            System.out.println("findMember = " + findMember.getClass());
-//
-//            System.out.println("refMember == findMember: " + (refMember == findMember));
-            //
-//            Member m1 = em.find(Member.class, member1.getId());
-//            Member m2 = em.getReference(Member.class, member2.getId());
-//
-//            System.out.println("m1 == m2: " + (m1 instanceof Member));
-//            System.out.println("m1 == m2: " + (m2 instanceof Member));
-
-            //
-//            Member findMember = em.find(Member.class, member.getId());
-//            Member findMember = em.getReference(Member.class, member.getId());
-//            System.out.println("before findMember = " + findMember.getClass()); //프록시 클래스
-//            System.out.println("findMember.id = " + findMember.getId());
-//            System.out.println("findMember.username = " + findMember.getUsername());
-//            System.out.println("after findMember = " + findMember.getClass()); //프록시 클래스
+            Parent findParent = em.find(Parent.class, parent.getId());
+            em.remove(findParent);
 
             tx.commit();
         } catch (Exception e) {
